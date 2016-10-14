@@ -12,14 +12,17 @@ describe('balances', () => {
     const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
     const fundAccounts = 1337;
     new Sigmate({ accounts: accountsObject, web3, fundAccounts }).then((sigmate) => {
-      Object.keys(accountsObject).forEach((name) => {
-        if (!isNaN(accountsObject[name].balance)) {
-          expect(sigmate.accounts[name].minimumFunding).to.equal(accountsObject[name].balance);
-        } else {
-          expect(sigmate.accounts[name].minimumFunding).to.equal(fundAccounts);
-        }
-      });
-      done();
+      return Promise.all(Object.keys(accountsObject).map((name) => {
+        return new Promise((resolve) => {
+          const account = sigmate.accounts[name];
+          const targetAmount = isNaN(accountsObject[name].balance) ? fundAccounts : accountsObject[name].balance;
+          expect(account.minimumFunding).to.equal(targetAmount);
+          web3.eth.getBalance(account.address, (err, balance) => {
+            expect(balance.toNumber()).to.equal(targetAmount);
+            resolve();
+          });
+        });
+      })).then(() => { done(); });
     });
   }).timeout(1000 * 60);
 });
