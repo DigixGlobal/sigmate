@@ -11,7 +11,7 @@ export const testLabelPath = `${VAULT_DIRECTORY}/sigmate-keystore-${testLabel}.j
 export const mockContract = {
   currentProvider: { },
   contract_name: 'MockContract',
-  setProvider (provider) {
+  setProvider(provider) {
     this.currentProvider = provider;
   },
 };

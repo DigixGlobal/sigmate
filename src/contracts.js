@@ -1,7 +1,7 @@
 import HookedWeb3Provider from 'hooked-web3-provider';
 
 export default function ({ keystore }) {
-  let contracts = {};
+  const contracts = {};
   // find truffle contracts in global namespace
   Object.keys(global).forEach((key) => {
     if (global[key] && global[key].contract_name) {
