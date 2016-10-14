@@ -21,5 +21,5 @@ describe('balances', () => {
       });
       done();
     });
-  });
+  }).timeout(1000 * 60);
 });
