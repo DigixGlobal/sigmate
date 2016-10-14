@@ -1,6 +1,6 @@
 {
   "name": "@digix/sigmate",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Testing tool: Generate HookedWeb3Providers for testing multiple accounts",
   "main": "src/index.js",
   "scripts": {
@@ -9,6 +9,11 @@
   },
   "author": "Chris Hitchcott <hitchcott@gmail.com> (http://hitchcott.com)",
   "license": "MIT",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/DigixGlobal/sigmate.git"
+  },
+  "homepage": "https://github.com/DigixGlobal/",
   "devDependencies": {
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-stage-2": "^6.17.0",
