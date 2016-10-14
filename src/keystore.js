@@ -38,9 +38,9 @@ function createKeystore() {
 
 export default function ({ accounts, label }) {
   const generatedAccounts = {};
-  // map accounts config object to empty object if `true`
+  // map accounts config object to empty object
   Object.keys(accounts).forEach((account) => {
-    generatedAccounts[account] = accounts[account] === true ? {} : accounts[account];
+    generatedAccounts[account] = {};
   });
   // if no label is supplied, we create a temporary keystore
   // if there is a label, read/save to the saved label's keystore

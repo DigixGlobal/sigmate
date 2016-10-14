@@ -23,11 +23,11 @@ const sigmate = new Sigmate(['primary', 'secondary'], 'label'); // label is opti
 // full options; generate accounts + web3 provider + wrapped contracts (in truffle environment)
 const sigmate = new Sigmate({
   accounts: { // pass array of strings or object
-    'primary': { balance: 1e18 }, // funds account with ether value
-    'secondary': true, // defaults to `defaultBalance` if not set
-    'tertiary': { balance 0 },
+    'primary': { balance: 1e18 }, // funds account with ether value -- only if fundAccounts is set
+    'secondary': true, // defaults to `fundAccounts` if `true`
+    'tertiary': { balance: 0 }, // don't fund this account
   },
-  defaultBalance: 1e18 * 0.5 // default 1e18 (1 ether), set default funding for all accounts
+  fundAccounts: 1e18 * 0.5 // optional, set default funding amount for all accounts
   contracts: true, // default true, detect + wrap truffle contracts
   provider: web3, // optional, pass web3 instance to be wrapped and returned
   label: 'myProject', // optional, provide a label to save the keystore, will be re-used between instantiations
@@ -44,7 +44,8 @@ sigmate.contracts // return wrapped contracts, see below 'Contract Interaction'
 {
   primary: {
     address: '0x1234...cdef',
-    privateKey: '...',
+    minimumFunding: 100,
+    initialBalance: 100,
     // TODO
   },
   secondary: { /* ... */ }
