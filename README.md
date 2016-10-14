@@ -6,22 +6,18 @@ The problem: writing a test suite is great with TestRPC, but it gets trickier wh
 
 Sigmate simplifies testing Ethereum contracts by using a local keystore to sign transactions. It's essentially a lightwallet specifically for testing within multiple different environments.
 
-When you initialise Sigmate, you pass it some unique account names. These accounts will be funded with Ether from the chain's default account, and web3 will be hooked to use these accounts instead of the default chain accounts.
+When you initialise Sigmate, you pass it some unique account names. These accounts will be automatically funded with Ether from the chain's default account, and web3 will be hooked to use these accounts instead of the default chain accounts.
 
 Sigmate is environment-agnostic, but will share keys across multiple chains. Ensure you initialise Sigmate with the correct balances for the chain you are working on.
-
-## TODO
-
-* Implement balance creation
 
 ## Usage
 
 ```javascript
 // shorthand; generate accounts + web3 provider
-const sigmate = new Sigmate(['primary', 'secondary'], 'label'); // label is optional, namespaces to a given project
+new Sigmate(['primary', 'secondary'], 'label').then((sigmate) => { ... }); // label is optional, namespaces to a given project
 
 // full options; generate accounts + web3 provider + wrapped contracts (in truffle environment)
-const sigmate = new Sigmate({
+new Sigmate({
   accounts: { // pass array of strings or object
     'primary': { balance: 1e18 }, // funds account with ether value -- only if fundAccounts is set
     'secondary': true, // defaults to `fundAccounts` if `true`
@@ -29,13 +25,13 @@ const sigmate = new Sigmate({
   },
   fundAccounts: 1e18 * 0.5 // optional, set default funding amount for all accounts
   contracts: true, // default true, detect + wrap truffle contracts
-  provider: web3, // optional, pass web3 instance to be wrapped and returned
+  web3: web3, // optional, pass web3 instance to be wrapped and returned
   label: 'myProject', // optional, provide a label to save the keystore, will be re-used between instantiations
+}).then((sigmate) => {  
+  sigmate.web3 // wrapped web3 provider, see below 'Web3 Provider'
+  sigmate.accounts // returns accounts info, see below 'Sigmate Accounts'
+  sigmate.contracts // return wrapped contracts, see below 'Contract Interaction'
 });
-
-sigmate.accounts // returns accounts info, see below 'Sigmate Accounts'
-sigmate.web3 // wrapped web3 provider, see below 'Web3 Provider'
-sigmate.contracts // return wrapped contracts, see below 'Contract Interaction'
 ```
 
 ## Sigmate Accounts
@@ -69,8 +65,16 @@ If you provide a `contracts` option (the `global` environment within a truffle `
 
 ```javascript
 const myContract = sigmate.contracts.MyContract.deployed();
-// using truffle's ether-pudding syntax
+// TODO using truffle's ether-pudding syntax
 myContract.someMethod(1234, { from: 'secondary' }).then( /* .... */ )
 // equivalent to
 myContract.someMethod(1234, { from: sigmate.accounts.secondary.address }).then( /* .... */ )
 ```
+
+## Tests
+
+`npm run test`
+
+## License
+
+MIT 2016
