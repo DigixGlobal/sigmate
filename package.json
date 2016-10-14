@@ -4,6 +4,7 @@
   "description": "Testing tool: Generate HookedWeb3Providers for testing multiple accounts",
   "main": "src/index.js",
   "scripts": {
+    "dev": "node_modules/.bin/mocha --watch --compilers js:babel-register",
     "test": "node_modules/.bin/mocha --compilers js:babel-register"
   },
   "author": "Chris Hitchcott <hitchcott@gmail.com> (http://hitchcott.com)",
@@ -19,5 +20,10 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
     "mocha": "^3.1.2"
+  },
+  "dependencies": {
+    "eth-lightwallet": "^2.5.2",
+    "hooked-web3-provider": "^1.0.0",
+    "web3": "^0.17.0-beta"
   }
 }

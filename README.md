@@ -28,8 +28,7 @@ const sigmate = new Sigmate({
   cache: true, // default true, re-use account keys between deploys (globally!)
   provider: web3, // optional, pass web3 instance to be wrapped
   host: 'http://localhost:8545', // optional, create or update web3 with the host
-  label: 'myProject', // optional, provide a label for the keystore, for re-usability
-  seed: 'xyz', // optional, provide a HD seed for generating accounts
+  label: 'myProject', // optional, provide a label to save the keystore, for re-usability
 });
 
 sigmate.accounts // returns accounts info, see below 'Sigmate Accounts'
