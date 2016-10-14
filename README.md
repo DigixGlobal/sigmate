@@ -2,7 +2,7 @@
 
 ### A tool to simplify running tests with multiple Ethereum Accounts
 
-This package is designed for use with [truffle](https://github.com/ConsenSys/truffle).
+This package is designed for use with [truffle](https://github.com/ConsenSys/truffle), and support ES6 projects.
 
 The problem: writing a test suite is great with TestRPC, but it gets trickier when trying to run the same suite against different chains, with potentially different accounts and balances.
 
@@ -14,7 +14,11 @@ Sigmate is environment-agnostic, but will share keys across multiple chains. Ens
 
 ## Usage
 
+`npm install @digix/sigmate`
+
 ```javascript
+import Sigmate from '@digix/sigmate'
+
 // shorthand; generate accounts + web3 provider
 new Sigmate(['primary', 'secondary'], 'label').then((sigmate) => { ... }); // label is optional, namespaces to a given project
 
