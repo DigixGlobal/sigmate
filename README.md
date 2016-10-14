@@ -10,6 +10,10 @@ When you initialise Sigmate, you pass it some unique account names. These accoun
 
 Sigmate is environment-agnostic, but will share keys across multiple chains. Ensure you initialise Sigmate with the correct balances for the chain you are working on.
 
+## TODO
+
+* Implement balance creation
+
 ## Usage
 
 ```javascript
@@ -25,10 +29,8 @@ const sigmate = new Sigmate({
   },
   defaultBalance: 1e18 * 0.5 // default 1e18 (1 ether), set default funding for all accounts
   contracts: true, // default true, detect + wrap truffle contracts
-  cache: true, // default true, re-use account keys between deploys (globally!)
-  provider: web3, // optional, pass web3 instance to be wrapped
-  host: 'http://localhost:8545', // optional, create or update web3 with the host
-  label: 'myProject', // optional, provide a label to save the keystore, for re-usability
+  provider: web3, // optional, pass web3 instance to be wrapped and returned
+  label: 'myProject', // optional, provide a label to save the keystore, will be re-used between instantiations
 });
 
 sigmate.accounts // returns accounts info, see below 'Sigmate Accounts'
