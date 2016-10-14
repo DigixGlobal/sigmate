@@ -1,6 +1,6 @@
 {
   "name": "@digix/sigmate",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Testing tool: Generate HookedWeb3Providers for testing multiple accounts",
   "main": "src/index.js",
   "scripts": {

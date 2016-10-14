@@ -2,6 +2,8 @@
 
 ### A tool to simplify running tests with multiple Ethereum Accounts
 
+This package is designed for use with [truffle](https://github.com/ConsenSys/truffle).
+
 The problem: writing a test suite is great with TestRPC, but it gets trickier when trying to run the same suite against different chains, with potentially different accounts and balances.
 
 Sigmate simplifies testing Ethereum contracts by using a local keystore to sign transactions. It's essentially a lightwallet specifically for testing within multiple different environments.
