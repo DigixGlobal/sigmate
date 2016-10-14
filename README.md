@@ -30,7 +30,6 @@ new Sigmate({
     'tertiary': { balance: 0 }, // don't fund this account
   },
   fundAccounts: 1e18 * 0.5 // optional, set default funding amount for all accounts
-  contracts: true, // default true, detect + wrap truffle contracts
   web3: web3, // optional, pass web3 instance to be wrapped and returned
   label: 'myProject', // optional, provide a label to save the keystore, will be re-used between instantiations
 }).then((sigmate) => {  
