@@ -22,11 +22,10 @@ export default function ({ web3, defaultAmount, accounts, accountOptions }) {
               // to get the async library out...
               web3.eth.getTransactionReceipt(txHash, (err3, receipt) => {
                 if (receipt && receipt.transactionHash === txHash) {
-                  filter.stopWatching(() => {
-                    return web3.eth.getBalance(address, (err4, fundedBalance) => {
-                      accountsWithBalances[name].initialBalance = fundedBalance.toNumber();
-                      resolve();
-                    });
+                  filter.stopWatching();
+                  return web3.eth.getBalance(address, (err4, fundedBalance) => {
+                    accountsWithBalances[name].initialBalance = fundedBalance.toNumber();
+                    resolve();
                   });
                 }
                 return null;
