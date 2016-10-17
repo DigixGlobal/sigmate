@@ -15,19 +15,22 @@ export default function ({ web3, defaultAmount, accounts, accountOptions }) {
           return resolve();
         }
         process.stdout.write(`Funding account ${name} with ${amount} wei...\n`);
-        return web3.eth.sendTransaction({ from: web3.eth.accounts[0], to: address, value: amountToSend }, (err2, txHash) => {
-          const filter = web3.eth.filter('latest');
-          filter.watch(() => {
-            // to get the async library out...
-            web3.eth.getTransactionReceipt(txHash, (err3, receipt) => {
-              if (receipt && receipt.transactionHash === txHash) {
-                filter.stopWatching();
-                return web3.eth.getBalance(address, (err4, fundedBalance) => {
-                  accountsWithBalances[name].initialBalance = fundedBalance.toNumber();
-                  resolve();
-                });
-              }
-              return null;
+        return web3.eth.getAccounts((err, nodeAccounts) => {
+          return web3.eth.sendTransaction({ from: nodeAccounts[0], to: address, value: amountToSend }, null, (err2, txHash) => {
+            const filter = web3.eth.filter('latest');
+            filter.watch(() => {
+              // to get the async library out...
+              web3.eth.getTransactionReceipt(txHash, (err3, receipt) => {
+                if (receipt && receipt.transactionHash === txHash) {
+                  filter.stopWatching(() => {
+                    return web3.eth.getBalance(address, (err4, fundedBalance) => {
+                      accountsWithBalances[name].initialBalance = fundedBalance.toNumber();
+                      resolve();
+                    });
+                  });
+                }
+                return null;
+              });
             });
           });
         });
