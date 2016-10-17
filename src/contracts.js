@@ -6,7 +6,7 @@ export default function ({ keystore }) {
   Object.keys(global).forEach((key) => {
     if (global[key] && global[key].contract_name) {
       // clone the global
-      const contract = { ...global[key] };
+      const contract = global[key];
       // create the provider for web3 transactions using ks
       const hookedProvider = new HookedWeb3Provider({
         ...contract.currentProvider,
