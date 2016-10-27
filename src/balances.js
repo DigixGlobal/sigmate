@@ -1,8 +1,23 @@
+export function asyncIterator(data, fn, done) {
+  let i = 0;
+  function iterate() {
+    fn(data[i], () => {
+      i++;
+      if (i > data.length - 1) {
+        done();
+      } else {
+        iterate();
+      }
+    });
+  }
+  iterate();
+}
+
 export default function ({ web3, defaultAmount, accounts, accountOptions }) {
   const accountsWithBalances = { ...accounts };
   // send some ether to the accounts...
-  return Promise.all(Object.keys(accounts).map((name) => {
-    return new Promise((resolve) => {
+  return new Promise((resolve) => {
+    return asyncIterator(Object.keys(accounts), (name, done) => {
       const amount = isNaN(accountOptions[name].balance) ? defaultAmount : accountOptions[name].balance;
       const address = accounts[name].address;
       accountsWithBalances[name].minimumFunding = amount;
@@ -25,7 +40,7 @@ export default function ({ web3, defaultAmount, accounts, accountOptions }) {
                   filter.stopWatching();
                   return web3.eth.getBalance(address, (err4, fundedBalance) => {
                     accountsWithBalances[name].initialBalance = fundedBalance.toNumber();
-                    resolve();
+                    done();
                   });
                 }
                 return null;
@@ -34,6 +49,6 @@ export default function ({ web3, defaultAmount, accounts, accountOptions }) {
           });
         });
       });
-    });
-  })).then(() => accountsWithBalances);
+    }, () => resolve());
+  }).then(() => accountsWithBalances);
 }
