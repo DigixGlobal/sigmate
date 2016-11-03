@@ -13,23 +13,19 @@ export function asyncIterator(data, fn, done) {
   iterate();
 }
 
-export default function ({ web3, defaultAmount, accounts, accountOptions }) {
-  const accountsWithBalances = { ...accounts };
-  // send some ether to the accounts...
+// update this in a bit...
+export default function (opts) {
+  const { accounts, web3, prefund } = opts;
   return new Promise((resolve) => {
-    return asyncIterator(Object.keys(accounts), (name, done) => {
-      const amount = isNaN(accountOptions[name].balance) ? defaultAmount : accountOptions[name].balance;
-      const address = accounts[name].address;
-      accountsWithBalances[name].minimumFunding = amount;
+    asyncIterator(accounts, (address, done) => {
       // check to see the balance of the current account
       return web3.eth.getBalance(address, (err1, initialBalance) => {
         // determine how much we need to send...
-        const amountToSend = amount - initialBalance.toNumber();
+        const amountToSend = prefund - initialBalance.toNumber();
         if (amountToSend <= 0) {
-          accountsWithBalances[name].initialBalance = initialBalance.toNumber();
-          return resolve();
+          return done();
         }
-        process.stdout.write(`Funding account ${name} with ${amount} wei...\n`);
+        process.stdout.write(`Funding account ${address} with ${amountToSend} additional wei...\n`);
         return web3.eth.getAccounts((err, nodeAccounts) => {
           return web3.eth.sendTransaction({ from: nodeAccounts[0], to: address, value: amountToSend }, null, (err2, txHash) => {
             const filter = web3.eth.filter('latest');
@@ -38,10 +34,7 @@ export default function ({ web3, defaultAmount, accounts, accountOptions }) {
               web3.eth.getTransactionReceipt(txHash, (err3, receipt) => {
                 if (receipt && receipt.transactionHash === txHash) {
                   filter.stopWatching();
-                  return web3.eth.getBalance(address, (err4, fundedBalance) => {
-                    accountsWithBalances[name].initialBalance = fundedBalance.toNumber();
-                    done();
-                  });
+                  done();
                 }
                 return null;
               });
@@ -49,6 +42,6 @@ export default function ({ web3, defaultAmount, accounts, accountOptions }) {
           });
         });
       });
-    }, () => resolve());
-  }).then(() => accountsWithBalances);
+    }, () => resolve(opts));
+  });
 }

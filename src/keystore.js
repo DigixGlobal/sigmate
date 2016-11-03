@@ -36,12 +36,7 @@ function createKeystore() {
   });
 }
 
-export default function ({ accounts, label }) {
-  const generatedAccounts = {};
-  // map accounts config object to empty object
-  Object.keys(accounts).forEach((account) => {
-    generatedAccounts[account] = {};
-  });
+export default function ({ count = 5, label }) {
   // if no label is supplied, we create a temporary keystore
   // if there is a label, read/save to the saved label's keystore
   return new Promise((resolve) => {
@@ -60,33 +55,24 @@ export default function ({ accounts, label }) {
       });
     });
   }).then(({ ks, pwDerivedKey }) => {
-    // create a a name map within the keystore
-    ks.ksData.sigmateNameMap = ks.ksData.sigmateNameMap || {};
-    // determine if name is already assigned an address
-    const newNames = Object.keys(accounts).filter((name) => {
-      if (!ks.ksData.sigmateNameMap[name]) { return true; }
-      // get the address if it's already assigned
-      generatedAccounts[name].address = ks.ksData.sigmateNameMap[name];
-      return false;
-    });
-    // generate new addresses for each of the new names
-    ks.generateNewAddress(pwDerivedKey, newNames.length);
-    const addresses = ks.getAddresses();
-    newNames.forEach((name, i) => {
-      // assign address to name
-      const address = addresses[addresses.length - newNames.length + i];
-      // write to keystore and accounts list
-      generatedAccounts[name].address = ks.ksData.sigmateNameMap[name] = address;
-    });
-    // save the keystore if we have any newNames
-    if (label && newNames.length) {
-      writeKeystore({ ks, label });
+    // count number of addresses that already exist
+    const existingAddresses = ks.getAddresses();
+    // check if we need to generate new ones
+    if (existingAddresses.length < count) {
+      // generat the reuqired number of new addresses
+      ks.generateNewAddress(pwDerivedKey, count - existingAddresses.length);
+      // save the keystore if we have generated new addresses
+      if (label) {
+        writeKeystore({ ks, label });
+      }
     }
+    // get the new address list, trim it to the number requested
+    const accounts = ks.getAddresses().slice(0, count).map(a => `0x${a}`);
     // make the password provider always sign with the default apssword
     ks.passwordProvider = function provider(callback) {
       callback(null, PASSWORD);
     };
-    // return the keystore and the accounts with addresses
-    return { keystore: ks, accounts: generatedAccounts };
+    // return the keystore and the count with accounts
+    return { keystore: ks, accounts };
   });
 }

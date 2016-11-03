@@ -4,15 +4,10 @@
 import { expect } from 'chai';
 import Sigmate from '../src';
 
-import { accountsArray } from './_harness';
-
-describe('web3', () => {
-  it('should return a web3 object with the transaction signer', (done) => {
-    new Sigmate(accountsArray).then((sigmate) => {
-      expect(sigmate.web3).to.be.an.object;
-      expect(sigmate.web3.currentProvider).to.exist;
+describe('web3', function () {
+  it('should return a web3 object with the transaction signer', function () {
+    new Sigmate().then((sigmate) => {
       expect(sigmate.web3.currentProvider.transaction_signer).to.exist;
-      done();
     });
   });
 });

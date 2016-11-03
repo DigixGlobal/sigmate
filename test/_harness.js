@@ -1,11 +1,6 @@
 import { VAULT_DIRECTORY } from '../src/constants';
 
-export const accountsArray = ['primary', 'secondary', 'tertiary'];
-export const accountsObject = {
-  [accountsArray[0]]: { balance: 1000 },
-  [accountsArray[1]]: { balance: 0 },
-  [accountsArray[2]]: true,
-};
+export const count = 13;
 export const testLabel = 'sigmate_testing';
 export const testLabelPath = `${VAULT_DIRECTORY}/sigmate-keystore-${testLabel}.json`;
 
