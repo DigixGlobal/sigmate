@@ -28,15 +28,15 @@ function readKeystore(label) {
   return LightWallet.keystore.deserialize(jsonData);
 }
 
-function createKeystore() {
+function createKeystore(password) {
   return new Promise((resolve) => {
-    LightWallet.keystore.createVault({ password: PASSWORD }, (err, ks) => {
+    LightWallet.keystore.createVault({ password }, (err, ks) => {
       resolve(ks);
     });
   });
 }
 
-export default function ({ count = 5, label }) {
+export default function ({ count = 5, label, password = PASSWORD }) {
   // if no label is supplied, we create a temporary keystore
   // if there is a label, read/save to the saved label's keystore
   return new Promise((resolve) => {
@@ -45,12 +45,12 @@ export default function ({ count = 5, label }) {
     // resolve promise if we have it
     if (readKs) { return resolve(readKs); }
     // keystore doesn't exist, we need to create it.
-    return createKeystore().then(resolve);
+    return createKeystore(password).then(resolve);
   }).then((ks) => {
     // get the key from the keystore for later use
     return new Promise((resolve) => {
       // get the pwDerivedKey
-      ks.keyFromPassword(PASSWORD, (err, pwDerivedKey) => {
+      ks.keyFromPassword(password, (err, pwDerivedKey) => {
         resolve({ ks, pwDerivedKey });
       });
     });
@@ -70,7 +70,7 @@ export default function ({ count = 5, label }) {
     const accounts = ks.getAddresses().slice(0, count).map(a => `0x${a}`);
     // make the password provider always sign with the default apssword
     ks.passwordProvider = function provider(callback) {
-      callback(null, PASSWORD);
+      callback(null, password);
     };
     // return the keystore and the count with accounts
     return { keystore: ks, accounts };

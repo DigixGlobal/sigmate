@@ -24,7 +24,7 @@ new Sigmate({
   count: 5, // optional, set number of accounts to create / fund
   prefund: 1e18 * 0.5 // optional, set default funding amount for all accounts
   web3: web3, // optional, pass web3 instance to be wrapped and returned
-  // TODO password: '', // optional, set a password to use for the keystore
+  password: '', // optional, set a password to use for the keystore
   label: 'myProject', // optional, provide a label to save the keystore, will be re-used between instantiations
 }).then((sigmate) => {  
   sigmate.web3 // wrapped web3 provider, see below 'Web3 Provider'
