@@ -1,20 +1,25 @@
 import HookedWeb3Provider from 'hooked-web3-provider';
 
-export default function ({ keystore }) {
-  const contracts = {};
-  // find truffle contracts in global namespace
-  Object.keys(global).forEach((key) => {
-    if (global[key] && global[key].contract_name) {
-      // clone the global
-      const contract = global[key];
-      // create the provider for web3 transactions using ks
-      const hookedProvider = new HookedWeb3Provider({
-        ...contract.currentProvider,
-        transaction_signer: keystore,
-      });
-      contract.setProvider(hookedProvider);
-      contracts[key] = contract;
-    }
+export default function ({ keystore, contracts }) {
+  const wrappedContracts = {};
+  // find truffle wrappedContracts in global namespace
+  const contractsArray = contracts
+    ?
+      Object.keys(contracts).map(k => contracts[k])
+    :
+      Object.keys(global)
+      .map(k => global[k] && global[k].contract_name)
+      .filter(k => k)
+      .map(k => global[k]);
+
+  contractsArray.forEach((contract) => {
+    const hookedProvider = new HookedWeb3Provider({
+      ...contract.currentProvider,
+      transaction_signer: keystore,
+    });
+    contract.setProvider(hookedProvider);
+    wrappedContracts[contract.contract_name] = contract;
   });
-  return contracts;
+
+  return wrappedContracts;
 }
