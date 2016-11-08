@@ -31,7 +31,8 @@ new Sigmate({
   contracts: contracts // optional, contracts object to wrap, will use deployer or global (from truffle) if not set
 }).then((sigmate) => {  
   sigmate.web3 // wrapped web3 provider, see below 'Web3 Provider'
-  sigmate.accounts // returns accounts info, see below 'Sigmate Accounts'
+  sigmate.accounts // returns array of addresses
+  sigmate.users // returns object mapped { userName: address }
   sigmate.contracts // return wrapped contracts, see below 'Contract Interaction'
 });
 ```
