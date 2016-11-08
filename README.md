@@ -22,6 +22,7 @@ import Sigmate from '@digix/sigmate'
 // full options; generate accounts + web3 provider + wrapped contracts (in truffle environment)
 new Sigmate({
   count: 5, // optional, set number of accounts to create / fund
+  users: ['alice', 'bob', 'charlie'], // optional (instead of count), label accounts with user names
   prefund: 1e18 * 0.5 // optional, set default funding amount for all accounts
   password: '', // optional, set a password to use for the keystore
   label: 'myProject', // optional, provide a label to save the keystore, will be re-used between instantiations

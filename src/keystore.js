@@ -36,7 +36,7 @@ function createKeystore(password) {
   });
 }
 
-export default function ({ count = 5, label, password = PASSWORD }) {
+export default function ({ count = 5, users, label, password = PASSWORD }) {
   // if no label is supplied, we create a temporary keystore
   // if there is a label, read/save to the saved label's keystore
   return new Promise((resolve) => {
@@ -55,24 +55,28 @@ export default function ({ count = 5, label, password = PASSWORD }) {
       });
     });
   }).then(({ ks, pwDerivedKey }) => {
+    const addressCount = users.length || count;
     // count number of addresses that already exist
     const existingAddresses = ks.getAddresses();
     // check if we need to generate new ones
-    if (existingAddresses.length < count) {
+    if (existingAddresses.length < addressCount) {
       // generat the reuqired number of new addresses
-      ks.generateNewAddress(pwDerivedKey, count - existingAddresses.length);
+      ks.generateNewAddress(pwDerivedKey, addressCount - existingAddresses.length);
       // save the keystore if we have generated new addresses
       if (label) {
         writeKeystore({ ks, label });
       }
     }
     // get the new address list, trim it to the number requested
-    const accounts = ks.getAddresses().slice(0, count).map(a => `0x${a}`);
+    const accounts = ks.getAddresses().slice(0, addressCount).map(a => `0x${a}`);
     // make the password provider always sign with the default apssword
     ks.passwordProvider = function provider(callback) {
       callback(null, password);
     };
+    // assign username to addresses
+    const mappedUsers = {};
+    users.forEach((k, i) => { mappedUsers[k] = accounts[i]; });
     // return the keystore and the count with accounts
-    return { keystore: ks, accounts };
+    return { keystore: ks, accounts, users: mappedUsers };
   });
 }

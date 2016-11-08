@@ -21,7 +21,7 @@ export default function Sigmate(opts = {}) {
     const knownContracts = opts.deployer && opts.deployer.known_contracts;
     const passedContracts = { ...opts.contracts, ...knownContracts };
     const contracts = new Contracts({ ...res, contracts: passedContracts });
-    const { keystore, accounts } = res;
-    return { web3: newWeb3, keystore, accounts, contracts };
+    const { keystore, accounts, users } = res;
+    return { web3: newWeb3, keystore, accounts, contracts, users };
   });
 }
