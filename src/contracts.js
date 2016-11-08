@@ -3,7 +3,7 @@ import HookedWeb3Provider from 'hooked-web3-provider';
 export default function ({ keystore, contracts }) {
   const wrappedContracts = {};
   // find truffle wrappedContracts in global namespace
-  const contractsArray = contracts
+  const contractsArray = Object.keys(contracts).length >= 1
     ?
       Object.keys(contracts).map(k => contracts[k])
     :

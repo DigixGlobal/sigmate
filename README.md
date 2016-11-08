@@ -23,16 +23,15 @@ import Sigmate from '@digix/sigmate'
 new Sigmate({
   count: 5, // optional, set number of accounts to create / fund
   prefund: 1e18 * 0.5 // optional, set default funding amount for all accounts
-  deployer: deployer, // optional, truffle deployer, will return wrapped
-  web3: web3, // optional, pass web3 instance to be wrapped and returned
   password: '', // optional, set a password to use for the keystore
   label: 'myProject', // optional, provide a label to save the keystore, will be re-used between instantiations
+  deployer: deployer, // optional, truffle deployer, will use for `web3` and `contracts`
+  web3: web3, // optional, pass web3 instance to be wrapped and returned
   contracts: contracts // optional, contracts object to wrap, will use deployer or global (from truffle) if not set
 }).then((sigmate) => {  
   sigmate.web3 // wrapped web3 provider, see below 'Web3 Provider'
   sigmate.accounts // returns accounts info, see below 'Sigmate Accounts'
   sigmate.contracts // return wrapped contracts, see below 'Contract Interaction'
-  sigmate.deployer // if you passed a deployer, outputs wrapped version
 });
 ```
 
