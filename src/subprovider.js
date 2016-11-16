@@ -1,22 +1,20 @@
-/* eslint-disable no-underscore-dangle */
-const HookedWalletEthTx = require('web3-provider-engine/subproviders/hooked-wallet-ethtx');
-const inherits = require('util').inherits;
+import HookedWalletEthTx from 'web3-provider-engine/subproviders/hooked-wallet-ethtx';
 
-function SigmateSubprovider(wallets, _opts) {
-  const opts = _opts || {};
-  opts.getAccounts = (cb) => {
-    cb(null, wallets.map(w => w.getAddressString()));
-  };
-  opts.getPrivateKey = (address, cb) => {
-    const wallet = wallets.find(w => w.getAddressString() === address);
-    if (!wallet) {
-      return cb('Account not found');
-    }
-    return cb(null, wallet.getPrivateKey());
-  };
-
-  SigmateSubprovider.super_.call(this, opts);
+export default class SigmateSubprovider extends HookedWalletEthTx {
+  constructor(wallets, opts) {
+    super({
+      ...opts,
+      getAccounts(cb) {
+        cb(null, wallets.map(w => w.getAddressString()));
+      },
+      getPrivateKey(address, cb) {
+        const wallet = wallets.find(w => w.getAddressString() === address);
+        if (wallet) {
+          cb(null, wallet.getPrivateKey());
+        } else {
+          cb('Account not found');
+        }
+      },
+    });
+  }
 }
-inherits(SigmateSubprovider, HookedWalletEthTx);
-
-module.exports = SigmateSubprovider;
