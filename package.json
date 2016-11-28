@@ -1,16 +1,16 @@
 {
   "name": "@digix/sigmate",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Keystore and Provider Management for Truffle",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "bin": {
     "sigmate": "./lib/bin/index.js"
   },
   "scripts": {
     "dev": "node_modules/.bin/mocha --watch --compilers js:babel-register",
     "test": "node_modules/.bin/mocha --compilers js:babel-register",
-    "compile": "rm -rf lib/* && ./node_modules/.bin/babel src -d lib",
-    "prepublish": "npm run compile && chmod +x ./lib/bin/index.js"
+    "compile": "rm -rf lib/* && ./node_modules/.bin/babel src -d lib && chmod +x ./lib/bin/index.js",
+    "prepublish": "npm run compile"
   },
   "author": "Chris Hitchcott <hitchcott@gmail.com> (http://hitchcott.com)",
   "license": "BSD-3-Clause",
@@ -33,6 +33,6 @@
     "ethereumjs-wallet": "^0.6.0",
     "prompt": "^1.0.0",
     "web3": "^0.17.0-beta",
-    "web3-provider-engine": "^8.1.7"
+    "web3-provider-engine": "git://github.com/hitchcott/provider-engine.git#49c987c210182459b93161f9986355d3100e8877"
   }
 }
