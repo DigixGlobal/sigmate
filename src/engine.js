@@ -12,7 +12,7 @@ import SigmateSubprovider from './subprovider';
 
 import { DEFAULT_PATH } from './constants';
 
-export default function ({ keystore, providerUrl }) {
+export default function ({ keystore, rpcUrl }) {
   const { path = DEFAULT_PATH, label, password } = keystore;
   const dest = `${path}/${label}`;
   if (!path) { throw new Error('Password not provided'); }
@@ -35,7 +35,7 @@ export default function ({ keystore, providerUrl }) {
   providerEngine.addProvider(new CacheSubprovider());
   providerEngine.addProvider(new FilterSubprovider());
   providerEngine.addProvider(new SigmateSubprovider(wallets));
-  const rpcSubprovider = new RpcSubprovider({ rpcUrl: providerUrl });
+  const rpcSubprovider = new RpcSubprovider({ rpcUrl });
   // TODO additional logging
   // const oldHandler = rpcSubprovider.handleRequest;
   // rpcSubprovider.handleRequest = (...args) => {
@@ -45,6 +45,7 @@ export default function ({ keystore, providerUrl }) {
   // providerEngine.on('error', err => console.log('err', err.stack));
   providerEngine.addProvider(rpcSubprovider);
   providerEngine.start();
+  // TODO prefund!
   return {
     providerEngine,
     coinbase: wallets[0].getAddressString(),
