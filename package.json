@@ -1,8 +1,8 @@
 {
   "name": "@digix/sigmate",
-  "version": "2.0.2",
+  "version": "2.0.4",
   "description": "Keystore and Provider Management for Truffle",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "bin": {
     "sigmate": "./lib/bin/index.js"
   },
@@ -32,7 +32,6 @@
     "bip39": "^2.2.0",
     "ethereumjs-wallet": "^0.6.0",
     "prompt": "^1.0.0",
-    "web3": "^0.17.0-beta",
-    "web3-provider-engine": "git://github.com/hitchcott/provider-engine.git#49c987c210182459b93161f9986355d3100e8877"
+    "web3-provider-engine": "^8.1.17"
   }
 }
