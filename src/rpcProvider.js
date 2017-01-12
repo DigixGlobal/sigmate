@@ -43,7 +43,7 @@ export default class SigmateSubprovider extends RPCProvider {
         console.error(err.stack);
         return end(err2);
       }
-      console.log('network:', payload.method, payload.params, '->', data.result);
+      // console.log('network:', payload.method, payload.params, '->', data.result);
       return end(null, data.result);
     });
   }

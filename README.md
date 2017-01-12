@@ -48,21 +48,26 @@ A keystore consists of multiple private keys in the encrypted geth format, and i
 
 **Truffle.js**
 
-Sigmate consumes a truffle config and automatically injects `networks` with a ProviderEngine (and custom Subprovider). For a given network, you must provide a `providerUrl` and a `keystore` object:
+Sigmate consumes a truffle config and automatically injects `networks` with a ProviderEngine (and custom Subprovider). For a given network, you must provide a `rpcUrl` and optional `keystore` object:
 
 ```javascript
-module.exports = sigmate.truffle({
+module.exports = {
   networks: {
-    morden: {
-      network_id: 2,
-      providerUrl: 'http://morden.infura.io:8545',
+    testnet: sigmate.config({
+      network_id: '3',
+      rpcUrl: 'https://ropsten.infura.io',
+      gas: 3000000,
       keystore: {
-        label: 'keystore-name',
-        password: 'keystore-password',
-      }
-    },
+        label: 'key-name',
+        password: 'secret',
+      },
+    }),
+    default: sigmate.config({
+      network_id: 'default',
+      rpcUrl: 'http://localhost:6545',
+    }),
   },
-});
+};
 ```
 
-Using the above config, if you deploy using the `morden` network, the default `from` address will be set to be the first account in the given keystore; truffle will use this to sign all tests and deployment steps by default.
+Using the above config, if you deploy using the `ropsten` network, the default `from` address will be set to be the first account in the given keystore; truffle will use this to sign all tests and deployment steps by default.
