@@ -1,6 +1,6 @@
 {
   "name": "@digix/sigmate",
-  "version": "2.1.1-dev",
+  "version": "2.1.4-dev",
   "description": "Keystore and Provider Management for Truffle",
   "main": "lib/index.js",
   "bin": {
@@ -26,13 +26,12 @@
     "eslint": "^3.10.1",
     "eslint-config-airbnb": "^13.0.0",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "ethereumjs-testrpc": "^3.0.3"
+    "eslint-plugin-jsx-a11y": "^2.2.3"
   },
   "dependencies": {
     "bip39": "^2.2.0",
     "ethereumjs-wallet": "^0.6.0",
     "prompt": "^1.0.0",
-    "web3-provider-engine": "^8.1.17"
+    "web3-provider-engine": "^8.3.0"
   }
 }
