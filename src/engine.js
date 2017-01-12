@@ -2,9 +2,10 @@ import fs from 'fs';
 import Wallet from 'ethereumjs-wallet';
 import ProviderEngine from 'web3-provider-engine';
 import NonceTrackerSubprovider from 'web3-provider-engine/subproviders/nonce-tracker';
-import RpcSubprovider from 'web3-provider-engine/subproviders/rpc';
+// import RpcSubprovider from 'web3-provider-engine/subproviders/rpc';
 
 import WalletSubprovider from './walletProvider';
+import RpcSubprovider from './rpcProvider';
 
 import { DEFAULT_PATH } from './constants';
 
