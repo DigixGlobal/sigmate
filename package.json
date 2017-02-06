@@ -1,6 +1,6 @@
 {
   "name": "@digix/sigmate",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Keystore and Provider Management for Truffle",
   "main": "lib/index.js",
   "bin": {
@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "bip39": "^2.2.0",
-    "ethereumjs-wallet": "^0.6.0",
+    "eth-lightwallet": "^2.5.3",
     "prompt": "^1.0.0",
     "web3-provider-engine": "^8.3.0"
   }

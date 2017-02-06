@@ -1,18 +1,19 @@
 import fs from 'fs';
 import prompt from 'prompt';
 import bip39 from 'bip39';
-import hdkey from 'ethereumjs-wallet/hdkey';
+import Lightwallet from 'eth-lightwallet';
 
 import {
   DEFAULT_PATH,
   DEFAULT_ACCOUNTS,
+  PREFIX,
 } from '../constants';
 
 function populateArgs({
   label,
   password,
   mnemonic,
-  accounts,
+  accounts = DEFAULT_ACCOUNTS,
   path = DEFAULT_PATH,
 }) {
   return new Promise((resolve, reject) => {
@@ -58,26 +59,34 @@ function populateArgs({
 }
 
 function generateKeystore({ label, mnemonic, password, path, accounts }) {
-  const dest = `${path}/${label}`;
+  const dest = `${path}/${PREFIX}${label}.json`;
   // create dest if it doesn't exist
   if (!fs.existsSync(path)) { fs.mkdirSync(path); }
-  if (!fs.existsSync(dest)) { fs.mkdirSync(dest); } else {
-    // throw if it already exists
+  // throw if it already exists
+  if (fs.existsSync(dest)) {
     throw new Error(`canceled - label is already in use: ${dest}`);
   }
   // generate mnemonic if required
-  let usedMnemonic = mnemonic;
+  let seedPhrase = mnemonic;
   if (!mnemonic) {
-    usedMnemonic = bip39.generateMnemonic();
-    process.stdout.write(`\nGenerated seed mnemonic:\n${usedMnemonic}\n`);
+    // TODO entropy, etc.
+    seedPhrase = bip39.generateMnemonic();
+    process.stdout.write(`\nGenerated seed mnemonic:\n${seedPhrase}\n`);
   }
-  process.stdout.write(`\nGenerating ${accounts} accounts:\n`);
-  const hd = hdkey.fromMasterSeed(usedMnemonic);
-  new Array(parseInt(accounts, 10) || DEFAULT_ACCOUNTS).fill(undefined).forEach((k, i) => {
-    const wallet = hd.deriveChild(i).getWallet();
-    const filename = `${dest}/${wallet.getV3Filename()}`;
-    fs.writeFileSync(filename, JSON.stringify(wallet.toV3(password)));
-    process.stdout.write(`${filename}\n`);
+  Lightwallet.keystore.createVault({
+    password,
+    seedPhrase,
+  }, (err, ks) => {
+    process.stdout.write(`\nGeneratied ${accounts} accounts:\n`);
+    ks.keyFromPassword(password, (err2, pwDerivedKey) => {
+      if (err2) throw err;
+      // generate new address/private key pairs
+      ks.generateNewAddress(pwDerivedKey, accounts);
+      ks.getAddresses().forEach((a) => process.stdout.write(`${a}\n`));
+      // save the keystore
+      fs.writeFileSync(dest, ks.serialize());
+      process.stdout.write(`\nSaved keystore:\n${dest}\n`);
+    });
   });
 }
 
