@@ -67,15 +67,9 @@ function generateKeystore({ label, mnemonic, password, path, accounts = DEFAULT_
     throw new Error(`canceled - label is already in use: ${dest}`);
   }
   // generate mnemonic if required
-  let seedPhrase = mnemonic;
-  if (!mnemonic) {
-    // TODO entropy, etc.
-    seedPhrase = bip39.generateMnemonic();
-    process.stdout.write(`\nGenerated seed mnemonic:\n${seedPhrase}\n`);
-  }
   Lightwallet.keystore.createVault({
     password,
-    seedPhrase,
+    seedPhrase: mnemonic || bip39.generateMnemonic(),
   }, (err, ks) => {
     process.stdout.write(`\nGeneratied ${accounts} accounts:\n`);
     ks.keyFromPassword(password, (err2, pwDerivedKey) => {

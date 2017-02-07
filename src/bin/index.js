@@ -7,7 +7,8 @@ const command = args._[0];
 
 import keystore from './keystore';
 import list from './list';
-const sigmate = { keystore, list };
+import expose from './expose';
+const sigmate = { keystore, list, expose };
 
 if (sigmate[command]) {
   sigmate[command](args);
@@ -23,8 +24,9 @@ $ sigmate [command]
 
 Commands:
 
-keystore      Create a new keystore
-list          List existing keystores
+keystore     Create a new keystore
+list         List existing keystores
+expose       (Dangerous!) Show the Seed Phrase and Private Keys for a keystore
 
 Optional Flags:
 

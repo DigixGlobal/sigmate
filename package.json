@@ -1,6 +1,6 @@
 {
   "name": "@digix/sigmate",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Keystore and Provider Management for Truffle",
   "main": "lib/index.js",
   "bin": {
