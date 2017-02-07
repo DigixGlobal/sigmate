@@ -45,7 +45,19 @@ Generated keystore with 4 accounts:
 - 0x....
 ```
 
-A keystore is an eth-lightwallet json file of multiple private keys, encrypted. It stored by default in `~/.sigmate/sigmate-v3-[label].json`. To check existing keystores, use `sigmate list`.
+A keystore is an eth-lightwallet json file of multiple private keys, encrypted. It stored by default in `~/.sigmate/sigmate-v3-[label].json`.
+
+```
+$ sigmate list
+```
+
+Will show a list of existing keystores, their addresses and location on disk.
+
+```
+$ sigmate expose
+```
+
+Will reveal the seed mnemonic and private keys of a given keystore.
 
 ## Truffle integration
 
