@@ -13,7 +13,7 @@ function populateArgs({
   label,
   password,
   mnemonic,
-  accounts = DEFAULT_ACCOUNTS,
+  accounts,
   path = DEFAULT_PATH,
 }) {
   return new Promise((resolve, reject) => {
@@ -58,7 +58,7 @@ function populateArgs({
   });
 }
 
-function generateKeystore({ label, mnemonic, password, path, accounts }) {
+function generateKeystore({ label, mnemonic, password, path, accounts = DEFAULT_ACCOUNTS }) {
   const dest = `${path}/${PREFIX}${label}.json`;
   // create dest if it doesn't exist
   if (!fs.existsSync(path)) { fs.mkdirSync(path); }
