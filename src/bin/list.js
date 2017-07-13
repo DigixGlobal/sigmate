@@ -14,7 +14,7 @@ export default function ({ path = DEFAULT_PATH }) {
     const ks = Lightwallet.keystore.deserialize(serialized);
     const addresses = ks.getAddresses();
     process.stdout.write(`\n${filename} [${addresses.length}]\n`);
-    addresses.forEach((a) => process.stdout.write(`${a}\n`));
+    addresses.forEach(a => process.stdout.write(`${a}\n`));
   });
   process.stdout.write('\n');
 }

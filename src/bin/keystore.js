@@ -7,6 +7,7 @@ import {
   DEFAULT_PATH,
   DEFAULT_ACCOUNTS,
   PREFIX,
+  DEFAULT_HD_PATH,
 } from '../constants';
 
 function populateArgs({
@@ -14,18 +15,19 @@ function populateArgs({
   password,
   mnemonic,
   accounts,
+  hdPath,
   path = DEFAULT_PATH,
 }) {
   return new Promise((resolve, reject) => {
     const requiredParams = [];
-    if (label && mnemonic && password) {
-      resolve({ label, mnemonic, password, path, accounts });
+    if (label && mnemonic && password && hdPath) {
+      resolve({ label, mnemonic, password, path, hdPath });
     }
     if (!label) {
       requiredParams.push({
         name: 'label',
         required: true,
-        pattern: /^[0-9a-zA-Z\-]+$/,
+        pattern: /^[0-9a-zA-Z-]+$/,
         description: 'Keystore label',
       });
     }
@@ -44,6 +46,12 @@ function populateArgs({
         description: `Number of accounts (default ${DEFAULT_ACCOUNTS})`,
       });
     }
+    if (!hdPath) {
+      requiredParams.push({
+        name: 'hdPath',
+        description: `HD Path: (default ${DEFAULT_HD_PATH})`,
+      });
+    }
     if (!mnemonic) {
       requiredParams.push({
         name: 'mnemonic',
@@ -53,12 +61,19 @@ function populateArgs({
     prompt.start();
     return prompt.get(requiredParams, (err, res) => {
       if (err) { return reject(err); }
-      return resolve({ label, mnemonic, password, path, accounts, ...res });
+      return resolve({ label, mnemonic, password, path, hdPath, accounts, ...res });
     });
   });
 }
 
-function generateKeystore({ label, mnemonic, password, path, accounts = DEFAULT_ACCOUNTS }) {
+function generateKeystore({
+  label,
+  mnemonic,
+  password,
+  path,
+  hdPath,
+  accounts,
+}) {
   const dest = `${path}/${PREFIX}${label}.json`;
   // create dest if it doesn't exist
   if (!fs.existsSync(path)) { fs.mkdirSync(path); }
@@ -66,17 +81,19 @@ function generateKeystore({ label, mnemonic, password, path, accounts = DEFAULT_
   if (fs.existsSync(dest)) {
     throw new Error(`canceled - label is already in use: ${dest}`);
   }
-  // generate mnemonic if required
-  Lightwallet.keystore.createVault({
-    password,
-    seedPhrase: mnemonic || bip39.generateMnemonic(),
-  }, (err, ks) => {
-    process.stdout.write(`\nGeneratied ${accounts} accounts:\n`);
+  const hdPathString = hdPath || DEFAULT_HD_PATH;
+  const accountsCount = accounts || DEFAULT_ACCOUNTS;
+  const seedPhrase = mnemonic || bip39.generateMnemonic();
+  console.log(hdPathString);
+  // create the vault
+  Lightwallet.keystore.createVault({ password, hdPathString, seedPhrase }, (err, ks) => {
+    if (err) { throw err; }
+    process.stdout.write(`\nGenerated ${accountsCount} accounts:\n`);
     ks.keyFromPassword(password, (err2, pwDerivedKey) => {
       if (err2) throw err;
       // generate new address/private key pairs
-      ks.generateNewAddress(pwDerivedKey, accounts);
-      ks.getAddresses().forEach((a) => process.stdout.write(`${a}\n`));
+      ks.generateNewAddress(pwDerivedKey, accountsCount);
+      ks.getAddresses().forEach(a => process.stdout.write(`${a}\n`));
       // save the keystore
       fs.writeFileSync(dest, ks.serialize());
       process.stdout.write(`\nSaved keystore:\n${dest}\n`);

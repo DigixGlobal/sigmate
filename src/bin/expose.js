@@ -1,11 +1,9 @@
 import fs from 'fs';
 import prompt from 'prompt';
-import bip39 from 'bip39';
 import Lightwallet from 'eth-lightwallet';
 
 import {
   DEFAULT_PATH,
-  DEFAULT_ACCOUNTS,
   PREFIX,
 } from '../constants';
 
@@ -24,7 +22,7 @@ function populateArgs({
       requiredParams.push({
         name: 'label',
         required: true,
-        pattern: /^[0-9a-zA-Z\-]+$/,
+        pattern: /^[0-9a-zA-Z-]+$/,
         description: 'Keystore label',
       });
     }

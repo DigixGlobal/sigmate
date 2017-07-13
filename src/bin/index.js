@@ -2,12 +2,13 @@
 import fs from 'fs';
 import path from 'path';
 import minimist from 'minimist';
-const args = minimist(process.argv.slice(2));
-const command = args._[0];
-
 import keystore from './keystore';
 import list from './list';
 import expose from './expose';
+
+const args = minimist(process.argv.slice(2));
+const command = args._[0];
+
 const sigmate = { keystore, list, expose };
 
 if (sigmate[command]) {
@@ -34,6 +35,7 @@ Optional Flags:
 --password   Decryption key for wallets
 --accounts   Number of wallets to create in keystore
 --path       Keystores location
+--hdPath     HD path String
 
 `);
 }
