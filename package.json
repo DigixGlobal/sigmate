@@ -1,6 +1,6 @@
 {
   "name": "@digix/sigmate",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Keystore and Provider Management for Truffle",
   "main": "lib/index.js",
   "bin": {
@@ -30,10 +30,10 @@
     "eslint-plugin-react": "^7.1.0"
   },
   "dependencies": {
-    "bip39": "^2.2.0",
-    "eth-lightwallet": "^3.0.0",
+    "bip39": "^2.5.0",
+    "eth-lightwallet": "3.0.0",
     "minimist": "^1.2.0",
     "prompt": "^1.0.0",
-    "web3-provider-engine": "^8.3.0"
+    "web3-provider-engine": "^14.1.0"
   }
 }
